@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { EliteApiProvider } from './../../providers/providers';
 
 /**
  * Generated class for the TeamDetailPage page.
@@ -9,16 +10,24 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  */
 @IonicPage()
 @Component({
-  selector: 'page-team-detail',
-  templateUrl: 'team-detail.html',
+    selector: 'page-team-detail',
+    templateUrl: 'team-detail.html',
 })
 export class TeamDetailPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+    games: any[];
+    team: any[];
+    private tourneyData: any;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad TeamDetailPage');
-  }
+    constructor(
+        public navCtrl: NavController,
+        public navParams: NavParams,
+        public eliteApi: EliteApiProvider) {
+    }
+
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad TeamDetailPage');
+        
+    }
 
 }

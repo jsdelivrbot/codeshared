@@ -5,14 +5,14 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>team-detail</ion-title>
-  </ion-navbar>
-
+    <ion-navbar>
+        <ion-title>team-detail</ion-title>
+    </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+    <ion-refresher (ionRefresh)="refreshAll($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 </ion-content>
