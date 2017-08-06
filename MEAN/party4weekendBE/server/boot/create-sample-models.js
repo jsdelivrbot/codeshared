@@ -17,7 +17,8 @@ module.export = function(app) {
         name: 'Caffe Artigiano',
         city: 'Vancouver',
       },
-    ], function(err, coffeeShops) {
+    ],
+    function(err, coffeeShops) {
       if (err) throw err;
       console.log('Models created: \n', coffeeShops);
     });
