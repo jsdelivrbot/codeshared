@@ -14,21 +14,28 @@ class Either {
     }
 
     static fromNullable(val) {
-        return val !== null ? right(val) : left(val);
+        return val ? Either.right(val) : Either.left(val);
 
     }
     static of(a) {
-        return right(a);
+        return Either.right(a);
+    }
+    fold(f, g) {}
+    static tryCatch(f) {
+        try {
+            return right(f());
+        } catch (error) {
+            return left("");
+        }
     }
 }
 
 class Left extends Either {
-    map(_) {
+    map(f) {
         return this; // noop
     }
     get value() {
         throw new TypeError('Can"t extract the value of a Left(a).');
-
     }
 
     getOrElse(other) {
@@ -46,6 +53,12 @@ class Left extends Either {
     filter(f) {
         return this;
     }
+    fold(f, g) {
+        return f();
+    }
+    app(other) {
+        return this;
+    }
     toString() {
         return `Either.Left(${this.value})`;
     }
@@ -53,8 +66,8 @@ class Left extends Either {
 
 class Right extends Either {
     map(f) {
+        console.log(f);
         return Either.of(f(this.value));
-
     }
 
     getOrElse(other) {
@@ -75,6 +88,12 @@ class Right extends Either {
     filter(f) {
         return Either.fromNullable(f(this.value) ? this.value : null);
     }
+    fold(f, g) {
+        return g(this.value);
+    }
+    app(other) {
+        return other.map(this.value);
+    }
     toString() {
         return `Either.Right(${this.value})`;
     }
@@ -87,3 +106,6 @@ const validLength = R.curry((len, str) => str.length === len)
 const checkLengthSSN = function(ssn) {
     return Either.fromNullable(ssn).filter(validLength(9)).getOrElseThrow(`Input: ${ssn} is not a valid SSN number`);
 }
+
+
+module.exports = Either;
