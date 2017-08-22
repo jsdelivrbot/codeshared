@@ -1,9 +1,10 @@
-var async = require('async');
+const async = require('async');
+
 module.exports = function(app) {
-  //data sources
+  // data sources
   var mongoDs = app.dataSources.mongoDs; // 'name' of your mongo connector, you can find it in datasource.json
   var mysqlDs = app.dataSources.mysqlDs;
-  //create all models
+  // create all models
   async.parallel({
     reviewers: async.apply(createReviewers),
     coffeeShops: async.apply(createCoffeeShops),
@@ -13,43 +14,43 @@ module.exports = function(app) {
       console.log('> models created sucessfully');
     });
   });
-  //create reviewers
+  // create reviewers
   function createReviewers(cb) {
     mongoDs.automigrate('Reviewer', function(err) {
       if (err) return cb(err);
       var Reviewer = app.models.Reviewer;
       Reviewer.create([{
         email: 'foo@bar.com',
-        password: 'foobar'
+        password: 'foobar',
       }, {
         email: 'john@doe.com',
-        password: 'johndoe'
+        password: 'johndoe',
       }, {
         email: 'jane@doe.com',
-        password: 'janedoe'
+        password: 'janedoe',
       }], cb);
     });
   }
-  //create coffee shops
+  // create coffee shops
   function createCoffeeShops(cb) {
     mysqlDs.automigrate('CoffeeShop', function(err) {
       if (err) return cb(err);
       var CoffeeShop = app.models.CoffeeShop;
       CoffeeShop.create([{
         name: 'Bel Cafe',
-        city: 'Vancouver'
+        city: 'Vancouver',
       }, {
         name: 'Three Bees Coffee House',
-        city: 'San Mateo'
+        city: 'San Mateo',
       }, {
         name: 'Caffe Artigiano',
-        city: 'Vancouver'
+        city: 'Vancouver',
       }, ], cb);
     });
   }
-  //create reviews
+  // create reviews
   function createReviews(reviewers, coffeeShops, cb) {
-    mongoDs.automigrate('Review', function(err) {
+    mongoDs.automigrate('Review', function (err) {
       if (err) return cb(err);
       var Review = app.models.Review;
       var DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
