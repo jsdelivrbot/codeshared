@@ -7,5 +7,13 @@ module.exports = (app) => {
     res.send('pongaroo');
   });
 
+  router.get('/bang', (req, res, next) => {
+      res.send('big');
+  });
+
+  router.get('/api', (req, res, next) => {
+      res.send('api');
+  })
+
   app.use(router);
 };
