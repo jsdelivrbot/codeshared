@@ -10,8 +10,8 @@ import 'rxjs/add/observable/interval';
     styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-    pageTitle: string = "Party For Weekend, Enjoy ^__^";
-    count: number = 0;
+    pageTitle = 'Party For Weekend, Enjoy ^__^';
+    count = 0;
 
     constructor(private title: Title) { }
 
