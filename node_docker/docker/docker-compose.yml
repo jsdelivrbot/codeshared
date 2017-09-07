@@ -1,0 +1,14 @@
+version: '2'
+services:
+    node_dev:
+        build:
+            context: ../
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        volumes:
+            - /app /usr/src/app/
+    mongo_dev:
+        image: "mongo"
+        ports:
+            - "27017:27017"

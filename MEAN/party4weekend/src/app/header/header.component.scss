@@ -23,8 +23,8 @@
     top: 0;
     transform: translate3d(-100%, 0, 0);
     width: 270px;
-    :host-context(.nav-closed) &,
-    :host-context(.nav-open) & {
+     :host-context(.nav-closed) &,
+     :host-context(.nav-open) & {
         display: block;
         /* deal with FOUC */
     }
@@ -112,6 +112,18 @@
         position: absolute;
         top: 0;
         width: 100%;
+    }
+    &-authStatus {
+        color: #fff;
+        font-size: 12px;
+        line-height: 50px;
+        padding: 0 10px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        a:hover {
+            text-decoration: underline;
+        }
     }
     a {
         color: #fff;

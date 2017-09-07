@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>API TEST PAGE</title>
+<link href="images/favicon.ico" rel="shortcut icon">
+<link type="text/css" rel="stylesheet" href="css/global.css" />
+<link type="text/css" rel="stylesheet" href="css/main.css" />
+
+<script type="text/javascript" src="js/lib/jquery-core.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+    //var host = 'http://bookshop.saritasa.com:4444';
+    var HOST = 'http://localhost:8080';
+    var API_LINK = '/api';
+
+		function renderJSON(obj) {
+			var retValue = "";
+      switch(typeof obj) {
+        case 'object':
+          for (var key in obj) {
+            retValue += "<div class='tree'>" + key + ": " + renderJSON(obj[key]) + "</div>";
+          }        
+          if(Array.isArray(obj)) {
+            retValue = '['+ retValue +']';
+          } else {
+            if(obj instanceof Object) {
+              retValue = '{'+ retValue +'}';
+            } else {
+              retValue = String(obj); // null
+            }
+          }
+          break;
+        default:
+          retValue = '&lt;'+typeof(obj)+'&gt;('+String(obj)+')';
+      }
+			return retValue;
+		}
+    
+		var showResult = function(result) {
+			$('#responseStatus').empty().append(result.status+": "+result.statusText);
+			$('#responseContent').empty().append(renderJSON(result.responseJSON));
+		};
+		
+		$('#' + $('#selectBox select').val()).removeClass('hidden');
+		
+		$('#selectBox select').change(function() {
+			$('.request').addClass('hidden');
+			$('#' + $(this).val()).removeClass('hidden');
+			$('#responseContent').empty();
+      $('#responseStatus').empty();
+		});
+
+    function ajax(method, actionUrl, data) {
+      return $.ajax({
+        url: HOST + API_LINK + actionUrl,
+        crossDomain: true,
+        xhrFields: {
+          withCredentials: true
+        },
+        type: method,
+        data: data,
+        //dataType: "json",
+        success : function(response, textStatus, data) {
+          console.log('access!');
+          console.dir(data);
+          showResult(data);
+        },
+        error: function(error) {
+          console.log('error');
+          console.dir(error);
+          if( !error.hasOwnProperty('responseJSON') ) {
+            error.responseJSON = error.responseText;
+          }
+          showResult(error);
+        }
+      });
+    }
+		
+		$('#userRegisterForm form').submit(function(e) {
+      e.preventDefault();
+      
+      var sval = $('#selectBox :selected').text();
+      var actionUrl = '';
+      switch(sval) {
+        case 'UserRegister':
+          actionUrl = '/signup';
+          break;
+        case 'UserLogin':
+          actionUrl = '/login';
+          break;
+      };      
+      ajax('POST', actionUrl, $(this).serialize());
+
+			return false;
+		});
+
+    function refreshSelector(e) {
+      e.preventDefault();
+      $('#apiPathSelector').trigger('change');
+      return false;
+    }    
+
+    $('#refresh').click(refreshSelector);
+    $('#bookGetForm form').submit(refreshSelector);
+    
+    function refreshOnEnter(e) {
+      if( e.which === 13 ) {
+        return refreshSelector(e);
+      }
+    }
+
+    $('#bookListForm form').submit(refreshSelector);
+    $('#bookListForm input[type!=submit]').keypress(refreshOnEnter);
+    
+    $('#bookUpdateForm input[type!=submit]').keypress(refreshOnEnter);
+    $('#bookUpdateForm form').submit(function(e) {
+      e.preventDefault();
+      var id = $(this).find('input[name="bookId"]').val();
+      ajax('PUT', '/books/'+id, $(this).serialize());
+      return false;
+    });
+
+    $('#bookDeleteForm input[type!=submit]').keypress(refreshOnEnter);
+    $('#bookDeleteForm form').submit(function(e) {
+      e.preventDefault();
+      var id = $(this).find('input[name="bookId"]').val();
+      ajax('DELETE', '/books/'+id);
+      return false;
+    });
+    
+    $('#apiPathSelector').change(function(e) {
+      console.log('change');
+      var val = $('#selectBox :selected').text();
+      switch(val) {
+        case 'UserLogin':
+          ajax('GET', '/login');
+        break;
+        case 'UserLogout':
+          ajax('GET', '/logout');
+        break;
+        case 'UserRegister':
+          ajax('GET', '/signup');
+        break;
+        case 'BookList':
+          var form = $('#bookListForm form');
+          ajax('GET', '/books', form.serialize());
+        break;
+        case 'BookGet':
+          var bookId = $('#bookGetForm input[name="bookId"]').val();
+          var actionUrl = '/books/'+bookId;
+          ajax('GET', actionUrl);
+        break;
+        case 'BookUpdate':
+          var bookId = $('#bookUpdateForm input[name="bookId"]').val();
+          var actionUrl = '/books/'+bookId;
+          ajax('GET', actionUrl).success(
+            function(response, textStatus, data) {
+            
+              function clearBookUpdateForm() {
+                $('#bookUpdateForm input[name!="bookId"][type!="submit"]').val('')
+              }
+              function refillBookUpdateForm(data) {
+                clearBookUpdateForm();
+                var book = data.responseJSON;
+                if(!book) { return; }
+              
+                function field(name) {
+                  return $('#bookUpdateForm').find('[name='+name+']');
+                }
+                
+                field('bookDesc').val(book.desc);
+                field('bookName').val(book.name);
+                field('bookPicture').val(book.picture);
+                field('bookPrice').val(book.price);
+
+              }
+              
+              refillBookUpdateForm(data);
+            }
+          );
+        break;
+        case 'BookDelete':
+          var bookId = $('#bookDeleteForm input[name="bookId"]').val();
+          var actionUrl = '/books/'+bookId;
+          ajax('GET', actionUrl);
+        break;
+      };
+      return;
+    });
+
+	});
+</script>
+
+</head>
+<body>
+	<h1>API TEST PAGE</h1>
+	<div id="selectBox">
+		<p>Select an API here:</p>
+		<select id="apiPathSelector">
+			<option value='' selected></option>
+			<option value='userRegisterForm'>UserRegister</option>
+      <option value='userRegisterForm'>UserLogin</option>
+      <option value=''>UserLogout</option>
+      <option value='bookListForm'>BookList</option>
+      <option value='bookGetForm'>BookGet</option>
+      <option value='bookUpdateForm'>BookUpdate</option>
+      <option value='bookDeleteForm'>BookDelete</option>
+		</select>
+    <button id='refresh'>Refresh</button>
+	</div>
+	<div id="content">
+		<div id="requestForm">
+			<h3>Request:</h3>
+			<div id="requestContent">
+				<!--
+					UserRegister form
+				-->
+				<div id="userRegisterForm" class="request hidden">
+					<form>
+						<div class="row">
+							<label>Username <strong>*</strong></label>
+							<input type="text" name="email" value="" />
+						</div>
+						<div class="row">
+							<label>Password <strong>*</strong></label>
+							<input type="password" name="password" />
+						</div>
+						<div class="row">
+							<label>&nbsp;</label>
+							<input type="submit" value="Submit" class="submitForm" />
+						</div>
+					</form>
+				</div>
+				<!--
+					BookList form
+				-->
+				<div id="bookListForm" class="request hidden">
+					<form>
+						<div class="row">
+							<label>page #</label>
+							<input type="text" name="page" value="0" />
+						</div>
+						<div class="row">
+							<label># of books per page</label>
+							<input type="text" name="limit" value="10" />
+						</div>
+					</form>
+				</div>
+				<!--
+					BookGet form
+				-->
+				<div id="bookGetForm" class="request hidden">
+					<form>
+						<div class="row">
+							<label>id <strong>*</strong></label>
+							<input type="text" name="bookId" value="0" />
+						</div>
+					</form>
+				</div>
+				<!--
+					BookUpdate form
+				-->
+				<div id="bookUpdateForm" class="request hidden">
+					<form>
+            <!--
+              desc: String,
+              id: Integer,
+              name: String,
+              picture: String,
+              price: Number
+            -->
+						<div class="row">
+							<label>id <strong>*</strong>(hit `Enter` to GET)</label>
+							<input type="text" name="bookId" value="0" />
+						</div>
+            
+						<div class="row">
+							<label>desc </label>
+							<input type="text" name="bookDesc" />
+						</div>
+						<div class="row">
+							<label>name <strong>*</strong></label>
+							<input type="text" name="bookName" />
+						</div>
+						<div class="row">
+							<label>picture </label>
+							<input type="text" name="bookPicture" />
+						</div>
+						<div class="row">
+							<label>price </label>
+							<input type="text" name="bookPrice" />
+						</div>
+            
+						<div class="row">
+							<label>&nbsp;</label>
+							<input type="submit" value="Update this id" class="submitForm" />
+						</div>
+					</form>
+				</div>
+				<!--
+					BookDelete form
+				-->
+				<div id="bookDeleteForm" class="request hidden">
+					<form>
+            <!--
+              desc: String,
+              id: Integer,
+              name: String,
+              picture: String,
+              price: Number
+            -->
+						<div class="row">
+							<label>id <strong>*</strong>(hit `Enter` to GET)</label>
+							<input type="text" name="bookId" value="0" />
+						</div>
+						<div class="row">
+							<label>&nbsp;</label>
+							<input type="submit" value="Delete this id" class="submitForm" />
+						</div>
+
+					</form>
+				</div>
+      </div>
+		</div>
+    <hr/>
+		<div id="responseForm">
+      <strong>Response status:</strong>
+			<span id="responseStatus">
+			</span>
+			<h3>Response body:</h3>
+			<div id="responseContent">
+			</div>
+		</div>
+	</div>
+</body>
+</html>

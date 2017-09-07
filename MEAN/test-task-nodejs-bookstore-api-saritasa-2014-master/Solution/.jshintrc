@@ -1,0 +1,38 @@
+{
+
+    // Enforcing
+
+    "strict": true, // strict for all functions
+    "curly": true,
+    "eqeqeq": true,
+    "immed": true,
+    "noarg": true,
+    "onevar": false,
+    "quotmark": "single",
+    "trailing": true,
+    "undef": true,
+    "unused": "vars", // allow unused args only
+
+    "camelcase": true,
+    //"indent": 2,
+    "latedef": true,
+    "newcap": true,
+    "noempty": true,
+    "nonew": true,
+
+    // Relaxing
+
+    //"boss": true, // check assignments are misused as comparisons
+    //"eqnull": true,
+    //"expr": true,
+    //"smarttabs": true,
+    "shadow": true,
+    "multistr": true,
+
+    // Environments
+
+    "browser": false,
+    "devel": false,
+    "node": true
+
+}
