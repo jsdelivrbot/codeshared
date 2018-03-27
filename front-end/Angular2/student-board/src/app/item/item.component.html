@@ -1,0 +1,14 @@
+<div class='heading'>
+  {{heading}}
+</div>
+
+<div class="email" *ngIf="email">
+  {{email}}
+</div>
+
+<div *ngIf='classes && classes.length > 0'>
+  <div *ngFor='let class of classes'>
+    {{class.name}}
+    {{class.professor}}
+  </div>
+</div>

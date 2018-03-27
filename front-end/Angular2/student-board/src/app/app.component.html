@@ -1,0 +1,7 @@
+<!-- {{objectKeys((student$ | async))}} -->
+
+<div>
+  <div *ngFor='let key of (student$ | async) | orderBy' >
+    <app-item [heading]='key.name' [email]='key.email' [classes]="key.classes"></app-item>
+  </div>
+</div>

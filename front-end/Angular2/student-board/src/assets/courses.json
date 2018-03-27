@@ -1,0 +1,27 @@
+[
+    {
+        "id": 50,
+        "name": "Intro to computer science",
+        "professor": "David J. Malan"
+    },
+    {
+        "id": 124,
+        "name": "Data Structures and Algorithms",
+        "professor": " Jelani Nelson"
+    },
+    {
+        "id": 127,
+        "name": "Cryptography",
+        "professor": " Boaz Barak"
+    },
+    {
+        "id": 152,
+        "name": "Programming Languages",
+        "professor": " Stephen Chong"
+    },
+    {
+        "id": 153,
+        "name": "Compilers",
+        "professor": " Stratos Idreos"
+    }
+]

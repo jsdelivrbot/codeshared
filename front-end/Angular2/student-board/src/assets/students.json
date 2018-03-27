@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Lula Morgan",
+        "email": "lumorgan@gmail.com",
+        "classes": [
+            50,
+            124
+        ]
+    },
+    {
+        "name": "Henry Neal",
+        "email": "heNeal@gmail.com",
+        "classes": [
+            127,
+            124,
+            152
+        ]
+    },
+    {
+        "name": "Charles Wolfe",
+        "email": "chawolfe@gmail.com",
+        "classes": [
+            127,
+            152
+        ]
+    },
+    {
+        "name": "Tommy Harrison",
+        "classes": [
+            153,
+            124
+        ]
+    },
+    {
+        "name": "Lucas Ramirez",
+        "email": "lucasrami@yahoo.com",
+        "classes": [
+            50,
+            152
+        ]
+    }
+]
