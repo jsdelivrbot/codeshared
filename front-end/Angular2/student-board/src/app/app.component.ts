@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from './services/student.service';
+import {ItemComponent} from './item/item.component';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { map } from 'rxjs/operators';
+import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -11,6 +12,8 @@ import { Observable } from 'rxjs/Observable';
 })
 export class AppComponent implements OnInit {
   public student$: Observable<Object>;
+  public criteria = 'student';
+  public selectedItem: ItemComponent;
 
   constructor(private students: StudentService) { }
 
@@ -26,8 +29,19 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public objectKeys(object: Object): Array<any> {
-    return object ? Object.keys(object) : [];
+
+  public sortByCriteria(criteria: string) {
+    switch (criteria) {
+      case 'student':
+        this.criteria = 'student';
+        break;
+      case 'course':
+        this.criteria = 'course';
+        break;
+    }
+  }
+
+  public addToFavorite() {
+
   }
 }
-

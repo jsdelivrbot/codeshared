@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+}
+
+.button--sort {
+  padding: 10px;
+}
+
+.button--sort:hover {
+  cursor: pointer;
+}
+
+.item-container {
+  flex: 1;
+}
+
+.fav-board-container {
+  flex: 2;
+}

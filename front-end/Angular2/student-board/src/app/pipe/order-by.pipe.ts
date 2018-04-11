@@ -7,6 +7,10 @@ import { Student, Courses } from '../student.model';
 export class OrderByPipe implements PipeTransform {
 
   transform(value: { students: Array<Student>, courses: Array<Courses> }, orderCriteria: string = 'student'): any {
+    if (!value) {
+      return;
+    }
+
     switch (orderCriteria) {
       case 'student':
         return this.orderByStudent(value);
@@ -23,16 +27,14 @@ export class OrderByPipe implements PipeTransform {
         transformStudent[index].classes.push(... value.courses.filter(course => course.id === id));
       });
     });
-    console.log('transformStudent = ', transformStudent);
     return transformStudent;
   }
 
   private orderByCourse(value: { students: Array<Student>, courses: Array<Courses> }): any {
     const transformCourses: Array<Courses> = JSON.parse(JSON.stringify(value.courses));
-    value.students.forEach((student: Student, index: number) => {
-      student.classes.forEach(id => {
-        transformCourses.filter(course => course.id === id)[0].student.push(student);
-      });
+    transformCourses.map((course: Courses, index: number) => {
+      course.students = [];
+      course.students.push(... value.students.filter((student: Student) => student.classes.filter(id => id === course.id)[0]));
     });
     return transformCourses;
   }

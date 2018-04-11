@@ -1,7 +1,23 @@
-<!-- {{objectKeys((student$ | async))}} -->
-
+<div class="item-container">
+  <app-item *ngFor='let key of (student$ | async) | orderBy:criteria, let i=index'
+    #item{{i}}
+    [heading]='key.name'
+    [email]='key.email'
+    [professor]='key.professor'
+    [classes]="key.classes"
+    [students]="key.students"
+    (addToFav)="selectedItem = $event"
+  >
+</app-item>
 <div>
-  <div *ngFor='let key of (student$ | async) | orderBy' >
-    <app-item [heading]='key.name' [email]='key.email' [classes]="key.classes"></app-item>
-  </div>
+  <button class="button--sort" (click)="sortByCriteria('student')">Group by student</button>
+  <button class="button--sort" (click)="sortByCriteria('course')">Group by course</button>
+</div>
+</div>
+
+
+
+<div class="fav-board-container">
+  <app-favorite-board [item]='selectedItem'>
+  </app-favorite-board>
 </div>

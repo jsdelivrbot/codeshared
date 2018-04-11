@@ -1,3 +1,15 @@
+:host {
+  display: block;
+  width: 320px;
+  padding: 5px;
+  border: 1px solid grey;
+  margin-bottom: 5px;
+}
+
 .heading {
     font: 24px bold;
+}
+
+.button:hover {
+  cursor: pointer;
 }

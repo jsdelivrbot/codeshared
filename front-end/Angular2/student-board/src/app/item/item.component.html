@@ -3,7 +3,11 @@
 </div>
 
 <div class="email" *ngIf="email">
-  {{email}}
+  Email: {{email}}
+</div>
+
+<div class="professor" *ngIf="professor">
+  Professor: {{professor}}
 </div>
 
 <div *ngIf='classes && classes.length > 0'>
@@ -12,3 +16,12 @@
     {{class.professor}}
   </div>
 </div>
+
+<div *ngIf='students && students.length > 0'>
+  <div *ngFor='let student of students'>
+    {{student.name}}
+    {{student.email}}
+  </div>
+</div>
+
+<button class="button" (click)='addToFavFnc($event)'>Add to favorite</button>

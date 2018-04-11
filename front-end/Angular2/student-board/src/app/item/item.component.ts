@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Courses } from '../student.model';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Courses, Student } from '../student.model';
 
 
 @Component({
@@ -11,10 +11,17 @@ export class ItemComponent implements OnInit {
 
   @Input() heading: string;
   @Input() email: string;
+  @Input() professor: string;
   @Input() classes: Array<Courses>;
+  @Input() students: Array<Student>;
+  @Output() addToFav = new EventEmitter();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  public addToFavFnc(): void {
+    this.addToFav.emit(this);
   }
 
 }

@@ -8,5 +8,5 @@ export interface Courses {
   id: number;
   name: string;
   professor: string;
-  student?: Array<Student>;
+  students?: Array<Student>;
 }
