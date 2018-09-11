@@ -1,1 +1,0 @@
-export { EliteApiProvider } from './elite-api/elite-api';
