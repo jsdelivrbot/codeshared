@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     totalDinos: function() {
-      this.dinosUpdated += 1;
+      // this.dinosUpdated += 1;
       let sum = 0;
       let items = this.items;
 
@@ -94,7 +94,7 @@ export default {
       return sum;
     },
     totalSpecies: function() {
-      this.speciesUpdated++;
+      // this.speciesUpdated++;
       return this.items.length;
     },
     buttonDisabled: function() {
